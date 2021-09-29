@@ -45,9 +45,32 @@ public class PokemonController {
         return new ResponseEntity<>(pokemon , new HttpHeaders() , HttpStatus.OK);
     }
 
-    
-    public HttpStatus updatePokemon(){
+    @PutMapping("/pokemon/{pokemonId}")
+    public HttpStatus updatePokemon(@PathVariable("pokemonId") int pokemonId , @RequestBody Pokemon pokemon){
 
+        HttpStatus status = null;
+        Pokemon actPokemon = null;
+
+        try {
+            actPokemon = pokemonService.getPokemonById(pokemonId);
+
+            actPokemon.setId(pokemon.getId());
+            actPokemon.setPokemonName(pokemon.getPokemonName());
+            actPokemon.setPokemonGender(pokemon.getPokemonGender());
+            actPokemon.setAge(pokemon.getAge());
+            actPokemon.setPokemonBreed(pokemon.getPokemonBreed());
+            actPokemon.setBattleMoves(pokemon.getBattleMoves());
+            actPokemon.setNextEvolution(pokemon.getNextEvolution());
+            actPokemon.setDescription(pokemon.getDescription());
+            actPokemon.setImageUrl(pokemon.getImageUrl());
+
+            pokemonService.createPokemon(actPokemon);
+            status = HttpStatus.OK;
+
+        }catch (PokemonNotFoundException p){
+            return HttpStatus.NOT_FOUND;
+        }
+        return status;
     }
 
     @DeleteMapping("/pokemon/{pokemonId}")
