@@ -13,6 +13,7 @@ public class PokemonFactory {
         List<Pokemon> pokemonList = new ArrayList<>();
 
         Pokemon pm1 = new Pokemon();
+        pm1.setId(13);
         pm1.setName("pikachuuuuuuu");
         pm1.setGender("maleeee");
         pm1.setAge(2222);

@@ -11,6 +11,6 @@ public interface PokemonService {
     List<Pokemon> getAllPokemon();
     void createPokemon(Pokemon pokemon);
     Pokemon getPokemonById(int pokemonId) throws PokemonNotFoundException;
-    void updatePokemon(Pokemon pokemon);
+    Pokemon updatePokemon(Pokemon pokemon);
     void deletePokemonById(int pokemonId) throws PokemonNotFoundException;
 }

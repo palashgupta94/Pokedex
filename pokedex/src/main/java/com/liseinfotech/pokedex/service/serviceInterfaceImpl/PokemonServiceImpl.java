@@ -19,33 +19,31 @@ public class PokemonServiceImpl implements PokemonService {
 
     @Override
     public List<Pokemon> getAllPokemon() {
+
         return (List<Pokemon>) pokemonRepository.findAll();
     }
 
     @Override
     public void createPokemon(Pokemon pokemon) {
+
         pokemonRepository.save(pokemon);
     }
 
     @Override
-    public Pokemon getPokemonById(int pokemonId) throws PokemonNotFoundException {
+    public Pokemon getPokemonById(int pokemonId) {
 
         Pokemon pokemon = null;
         Optional<Pokemon> optional = pokemonRepository.findById(pokemonId);
-
         if(optional.isPresent()){
             pokemon = optional.get();
-        }
-        else{
-            throw new PokemonNotFoundException(" Pokemon not found for this id : "+ pokemonId);
         }
         return pokemon;
 
     }
 
     @Override
-    public void updatePokemon(Pokemon pokemon) {
-        pokemonRepository.save(pokemon);
+    public Pokemon updatePokemon(Pokemon pokemon) {
+        return pokemonRepository.save(pokemon);
     }
 
     @Override

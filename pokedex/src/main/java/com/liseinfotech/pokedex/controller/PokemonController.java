@@ -23,7 +23,7 @@ public class PokemonController {
     @PostMapping("/pokemon")
     public ResponseEntity<Pokemon> createPokemon(@RequestBody Pokemon pokemon){
         pokemonService.createPokemon(pokemon);
-        return new ResponseEntity<Pokemon>(pokemon , new HttpHeaders() , HttpStatus.OK);
+        return new ResponseEntity<Pokemon>(pokemon , new HttpHeaders() , HttpStatus.CREATED);
     }
 
     @GetMapping("/pokemon")
@@ -34,29 +34,26 @@ public class PokemonController {
     }
 
     @GetMapping("/pokemon/{pokemonId}")
-    public ResponseEntity<Pokemon>getPokemonById(@PathVariable("pokemonId") int pokemonId) {
+    public ResponseEntity<Pokemon>getPokemonById(@PathVariable("pokemonId") int pokemonId) throws PokemonNotFoundException, Exception {
 
-        Pokemon pokemon = null;
-
-        try {
-            pokemon = pokemonService.getPokemonById(pokemonId);
-        } catch (PokemonNotFoundException e) {
-
-            return  new ResponseEntity<>(null , new HttpHeaders() , HttpStatus.NOT_FOUND);
+        Pokemon pokemon = pokemonService.getPokemonById(pokemonId);
+        if (pokemon==null){
+            throw new PokemonNotFoundException(" Pokemon not found for this id : "+ pokemonId);
         }
         return new ResponseEntity<>(pokemon , new HttpHeaders() , HttpStatus.OK);
     }
 
     @PutMapping("/pokemon/{pokemonId}")
-    public HttpStatus updatePokemon(@PathVariable("pokemonId") int pokemonId , @RequestBody Pokemon pokemon){
+    public ResponseEntity<Pokemon> updatePokemon(@PathVariable("pokemonId") int pokemonId , @RequestBody Pokemon pokemon) throws PokemonNotFoundException {
 
         HttpStatus status = null;
         Pokemon actPokemon = null;
+        Pokemon updatedPokemon = null;
 
         try {
             actPokemon = pokemonService.getPokemonById(pokemonId);
 
-            actPokemon.setId(pokemon.getId());
+            actPokemon.setId(pokemonId);
             actPokemon.setName(pokemon.getName());
             actPokemon.setGender(pokemon.getGender());
             actPokemon.setAge(pokemon.getAge());
@@ -66,25 +63,24 @@ public class PokemonController {
             actPokemon.setDescription(pokemon.getDescription());
             actPokemon.setImageUrl(pokemon.getImageUrl());
 
-            pokemonService.createPokemon(actPokemon);
+            updatedPokemon = pokemonService.updatePokemon(actPokemon);
             status = HttpStatus.OK;
 
         }catch (PokemonNotFoundException p){
-            return HttpStatus.NOT_FOUND;
+            throw new PokemonNotFoundException("Pokemon not found for this : "+ pokemonId);
         }
-        return status;
+        return new ResponseEntity<>(updatedPokemon , new HttpHeaders() , status);
     }
 
     @DeleteMapping("/pokemon/{pokemonId}")
-    public HttpStatus deletePokemonById(@PathVariable("pokemonId") int id){
-        try {
-            pokemonService.deletePokemonById(id);
-        } catch (PokemonNotFoundException e) {
-            return HttpStatus.NOT_FOUND;
-        }
-        return HttpStatus.OK;
+    public HttpStatus deletePokemonById(@PathVariable("pokemonId") int id) throws PokemonNotFoundException,Exception {
+            Pokemon pokemon = pokemonService.getPokemonById(id);
+            if (pokemon!=null){
+                pokemonService.deletePokemonById(id);
+                return HttpStatus.OK;
+            } else {
+                throw new PokemonNotFoundException("The pokemon to be deleted with id: " + id + " Does not exist");
+            }
     }
-
-
 
 }
