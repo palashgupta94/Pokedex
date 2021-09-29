@@ -2,6 +2,7 @@ package com.liseinfotech.pokedex.controller;
 
 import com.liseinfotech.pokedex.customExceptions.PokemonNotFoundException;
 import com.liseinfotech.pokedex.entity.Pokemon;
+
 import com.liseinfotech.pokedex.service.serviceInterface.PokemonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +29,7 @@ public class PokemonController {
     @GetMapping("/pokemon")
     public ResponseEntity<List<Pokemon>> getAllPokemon(){
         List<Pokemon>list = pokemonService.getAllPokemon();
+//        List<Pokemon> list = (List<Pokemon>) pokemonRepository.findAll();
         return new ResponseEntity<List<Pokemon>>(list , new HttpHeaders() , HttpStatus.OK);
     }
 
@@ -55,10 +57,10 @@ public class PokemonController {
             actPokemon = pokemonService.getPokemonById(pokemonId);
 
             actPokemon.setId(pokemon.getId());
-            actPokemon.setPokemonName(pokemon.getPokemonName());
-            actPokemon.setPokemonGender(pokemon.getPokemonGender());
+            actPokemon.setName(pokemon.getName());
+            actPokemon.setGender(pokemon.getGender());
             actPokemon.setAge(pokemon.getAge());
-            actPokemon.setPokemonBreed(pokemon.getPokemonBreed());
+            actPokemon.setBreed(pokemon.getBreed());
             actPokemon.setBattleMoves(pokemon.getBattleMoves());
             actPokemon.setNextEvolution(pokemon.getNextEvolution());
             actPokemon.setDescription(pokemon.getDescription());

@@ -14,16 +14,16 @@ public class Pokemon implements Serializable {
     private int id;
 
 
-    private String pokemonName;
+    private String name;
 
 
-    private String pokemonGender;
+    private String gender;
 
 
     private int age;
 
 
-    private String pokemonBreed;
+    private String breed;
 
 
     @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
@@ -44,18 +44,15 @@ public class Pokemon implements Serializable {
     public Pokemon() {
     }
 
-    public Pokemon(int id, String pokemonName, String pokemonGender, int age, String pokemonBreed, List<BattleMoves> battleMoves,
-                   List<PokemonTypeEnum> pokemonType, String nextEvolution, Map<String, String> battleStats , String description,
-                    String imageUrl) {
+    public Pokemon(int id, String name, String gender, int age, String breed, List<BattleMoves> battleMoves, String nextEvolution, String description, String imageUrl) {
         this.id = id;
-        this.pokemonName = pokemonName;
-        this.pokemonGender = pokemonGender;
+        this.name = name;
+        this.gender = gender;
         this.age = age;
-        this.pokemonBreed = pokemonBreed;
+        this.breed = breed;
         this.battleMoves = battleMoves;
-//        this.pokemonType = pokemonType;
         this.nextEvolution = nextEvolution;
-//        this.battleStats = battleStats;
+        this.description = description;
         this.imageUrl = imageUrl;
     }
 
@@ -67,20 +64,20 @@ public class Pokemon implements Serializable {
         this.id = id;
     }
 
-    public String getPokemonName() {
-        return pokemonName;
+    public String getName() {
+        return name;
     }
 
-    public void setPokemonName(String pokemonName) {
-        this.pokemonName = pokemonName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPokemonGender() {
-        return pokemonGender;
+    public String getGender() {
+        return gender;
     }
 
-    public void setPokemonGender(String pokemonGender) {
-        this.pokemonGender = pokemonGender;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public int getAge() {
@@ -91,12 +88,12 @@ public class Pokemon implements Serializable {
         this.age = age;
     }
 
-    public String getPokemonBreed() {
-        return pokemonBreed;
+    public String getBreed() {
+        return breed;
     }
 
-    public void setPokemonBreed(String pokemonBreed) {
-        this.pokemonBreed = pokemonBreed;
+    public void setBreed(String breed) {
+        this.breed = breed;
     }
 
     public List<BattleMoves> getBattleMoves() {
@@ -151,10 +148,10 @@ public class Pokemon implements Serializable {
     public String toString() {
         return "Pokemon{" +
                 "id=" + id +
-                ", pokemonName='" + pokemonName + '\'' +
-                ", pokemonGender='" + pokemonGender + '\'' +
+                ", pokemonName='" + name + '\'' +
+                ", pokemonGender='" + gender + '\'' +
                 ", age=" + age +
-                ", pokemonBreed='" + pokemonBreed + '\'' +
+                ", pokemonBreed='" + breed + '\'' +
                 ", battleMoves=" + battleMoves +
                 ", nextEvolution='" + nextEvolution + '\'' +
                 ", description='" + description + '\'' +
