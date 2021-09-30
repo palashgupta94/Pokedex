@@ -1,12 +1,10 @@
 package com.liseinfotech.pokedex.entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
+import com.liseinfotech.pokedex.entity.Stats;
 
 @Entity
 @Table(name = "pokemon")
@@ -43,9 +41,29 @@ public class Pokemon implements Serializable {
     @Column(name = "next_evolution")
     private String nextEvolution;
 
+    @Max(500)
+    @Min(1)
     private String description;
 
     private String imageUrl;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "trainer_id")
+    private Trainer trainer;
+
+    @ElementCollection(targetClass = PokemonTypeEnum.class)
+    @Enumerated(EnumType.STRING)
+    private List<PokemonTypeEnum>weakness;
+
+    @ElementCollection(targetClass = PokemonTypeEnum.class)
+    @Enumerated(EnumType.STRING)
+    private List<PokemonTypeEnum> Strength;
+
+    @OneToOne
+    @JoinColumn(name = "stats")
+    private Stats stats;
+
+
 
     public Pokemon() {
     }
@@ -60,6 +78,7 @@ public class Pokemon implements Serializable {
         this.nextEvolution = nextEvolution;
         this.description = description;
         this.imageUrl = imageUrl;
+
     }
 
     public int getId() {

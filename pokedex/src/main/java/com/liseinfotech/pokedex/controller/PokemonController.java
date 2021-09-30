@@ -8,17 +8,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
+@Validated
 public class PokemonController {
 
     @Autowired
     private PokemonService pokemonService;
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
+        return new ResponseEntity<>("Some of the values for the properties are not valid because " + e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 
     @PostMapping("/pokemon")
     public ResponseEntity<Pokemon> createPokemon(@RequestBody Pokemon pokemon){

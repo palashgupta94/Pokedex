@@ -1,6 +1,7 @@
 package com.liseinfotech.pokedex.helper;
 
 import com.liseinfotech.pokedex.entity.BattleMoves;
+import com.liseinfotech.pokedex.entity.Gender;
 import com.liseinfotech.pokedex.entity.Pokemon;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class PokemonFactory {
         Pokemon pm1 = new Pokemon();
         pm1.setId(13);
         pm1.setName("pikachuuuuuuu");
-        pm1.setGender("maleeee");
+        pm1.setGender(Gender.MALE);
         pm1.setAge(2222);
         pm1.setBreed("Pikachu");
 
@@ -54,7 +55,7 @@ public class PokemonFactory {
 
         Pokemon pm2 = new Pokemon();
         pm2.setName("bulba");
-        pm2.setGender("male");
+        pm2.setGender(Gender.MALE);
         pm2.setAge(2);
         pm2.setBreed("Bulbasaur");
 

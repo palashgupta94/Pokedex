@@ -22,7 +22,8 @@ public enum PokemonTypeEnum implements Serializable {
     ICE("ICE") ,
     DRAGON("DRAGON") ,
     FAIRY("FAIRY") ,
-    DARK("DARK");
+    DARK("DARK"),
+    ELECTRIC("ELECTRIC");
 
     private String value;
 
