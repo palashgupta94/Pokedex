@@ -11,6 +11,7 @@ public class Trainer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "trainer_id")
     private int trainerId;
 
     private String name;
@@ -20,8 +21,7 @@ public class Trainer implements Serializable {
 
     private String region;
 
-    @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
-    @JoinColumn
+    @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY )
     private List<Achievement> achievements;
 
     private int noOfLosses;

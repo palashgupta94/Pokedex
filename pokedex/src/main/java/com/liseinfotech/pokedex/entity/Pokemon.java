@@ -14,17 +14,14 @@ public class Pokemon implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @NotNull
-    @NotBlank
+
     private String name;
 
-    @NotNull
     private Gender gender;
 
 
     private int age;
 
-    @NotNull
     private String breed;
 
 
@@ -34,15 +31,11 @@ public class Pokemon implements Serializable {
 
     @ElementCollection(targetClass = PokemonTypeEnum.class)
     @Enumerated(EnumType.STRING)
-    @NotNull
-    @NotEmpty
     private List<PokemonTypeEnum> pokemonType;
 
     @Column(name = "next_evolution")
     private String nextEvolution;
 
-    @Max(500)
-    @Min(1)
     private String description;
 
     private String imageUrl;
@@ -52,15 +45,13 @@ public class Pokemon implements Serializable {
     private Trainer trainer;
 
     @ElementCollection(targetClass = PokemonTypeEnum.class)
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING )
     private List<PokemonTypeEnum>weakness;
 
     @ElementCollection(targetClass = PokemonTypeEnum.class)
     @Enumerated(EnumType.STRING)
     private List<PokemonTypeEnum> Strength;
 
-    @OneToOne
-    @JoinColumn(name = "stats")
     private Stats stats;
 
 
@@ -68,17 +59,23 @@ public class Pokemon implements Serializable {
     public Pokemon() {
     }
 
-    public Pokemon(int id, String name, Gender gender, int age, String breed, List<BattleMoves> battleMoves, String nextEvolution, String description, String imageUrl) {
+    public Pokemon(int id,  String name, Gender gender, int age,  String breed, List<BattleMoves> battleMoves,
+                   List<PokemonTypeEnum> pokemonType, String nextEvolution,  String description,
+                   String imageUrl, Trainer trainer, List<PokemonTypeEnum> weakness, List<PokemonTypeEnum> strength, Stats stats) {
         this.id = id;
         this.name = name;
         this.gender = gender;
         this.age = age;
         this.breed = breed;
         this.battleMoves = battleMoves;
+        this.pokemonType = pokemonType;
         this.nextEvolution = nextEvolution;
         this.description = description;
         this.imageUrl = imageUrl;
-
+        this.trainer = trainer;
+        this.weakness = weakness;
+        Strength = strength;
+        this.stats = stats;
     }
 
     public int getId() {
@@ -145,13 +142,37 @@ public class Pokemon implements Serializable {
         this.nextEvolution = nextEvolution;
     }
 
-//    public Map<String, String> getBattleStats() {
-//        return battleStats;
-//    }
-//
-//    public void setBattleStats(Map<String, String> battleStats) {
-//        this.battleStats = battleStats;
-//    }
+    public Trainer getTrainer() {
+        return trainer;
+    }
+
+    public void setTrainer(Trainer trainer) {
+        this.trainer = trainer;
+    }
+
+    public List<PokemonTypeEnum> getWeakness() {
+        return weakness;
+    }
+
+    public void setWeakness(List<PokemonTypeEnum> weakness) {
+        this.weakness = weakness;
+    }
+
+    public List<PokemonTypeEnum> getStrength() {
+        return Strength;
+    }
+
+    public void setStrength(List<PokemonTypeEnum> strength) {
+        Strength = strength;
+    }
+
+    public Stats getStats() {
+        return stats;
+    }
+
+    public void setStats(Stats stats) {
+        this.stats = stats;
+    }
 
     public String getDescription() {
         return description;
@@ -169,19 +190,26 @@ public class Pokemon implements Serializable {
         this.imageUrl = imageUrl;
     }
 
+
+
+
     @Override
     public String toString() {
         return "Pokemon{" +
                 "id=" + id +
-                ", pokemonName='" + name + '\'' +
-                ", pokemonGender='" + gender + '\'' +
+                ", name='" + name + '\'' +
+                ", gender=" + gender +
                 ", age=" + age +
-                ", pokemonBreed='" + breed + '\'' +
+                ", breed='" + breed + '\'' +
                 ", battleMoves=" + battleMoves +
+                ", pokemonType=" + pokemonType +
                 ", nextEvolution='" + nextEvolution + '\'' +
                 ", description='" + description + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
-                ", Type='" + pokemonType + '\'' +
+                ", trainer=" + trainer +
+                ", weakness=" + weakness +
+                ", Strength=" + Strength +
+                ", stats=" + stats +
                 '}';
     }
 }
