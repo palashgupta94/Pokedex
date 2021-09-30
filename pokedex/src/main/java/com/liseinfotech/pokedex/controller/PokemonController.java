@@ -46,13 +46,12 @@ public class PokemonController {
     @PutMapping("/pokemon/{pokemonId}")
     public ResponseEntity<Pokemon> updatePokemon(@PathVariable("pokemonId") int pokemonId , @RequestBody Pokemon pokemon) throws PokemonNotFoundException {
 
-        HttpStatus status = null;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         Pokemon actPokemon = null;
         Pokemon updatedPokemon = null;
 
-        try {
-            actPokemon = pokemonService.getPokemonById(pokemonId);
-
+        actPokemon = pokemonService.getPokemonById(pokemonId);
+        if (actPokemon != null) {
             actPokemon.setId(pokemonId);
             actPokemon.setName(pokemon.getName());
             actPokemon.setGender(pokemon.getGender());
@@ -65,8 +64,7 @@ public class PokemonController {
 
             updatedPokemon = pokemonService.updatePokemon(actPokemon);
             status = HttpStatus.OK;
-
-        }catch (PokemonNotFoundException p){
+        } else {
             throw new PokemonNotFoundException("Pokemon not found for this : "+ pokemonId);
         }
         return new ResponseEntity<>(updatedPokemon , new HttpHeaders() , status);

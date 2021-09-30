@@ -1,4 +1,4 @@
 package com.liseinfotech.pokedex.entity;
 
-public class PokemonTypeClass {
+public enum  Gender {
 }

@@ -108,37 +108,44 @@ class PokemonControllerTest {
 
     }
 
-//    @Test
-//    public void updatePokemon_success() throws Exception{
-//
-//        Pokemon newPokemon = PokemonFactory.getPokemons().get(0);
-//
-//        Pokemon updPokemon = new Pokemon();
-//        updPokemon.setId(13);
-//        updPokemon.setName("pika pika");
-//        updPokemon.setAge(newPokemon.getAge());
-//        updPokemon.setGender(newPokemon.getGender());
-//        updPokemon.setDescription(newPokemon.getDescription());
-//        updPokemon.setBreed(newPokemon.getBreed());
-//        updPokemon.setImageUrl(newPokemon.getImageUrl());
-//        newPokemon.getBattleMoves().add(new BattleMoves("Rest" , "Psychic" , "Non-damaging" , "" , ""));
-//        updPokemon.setBattleMoves(newPokemon.getBattleMoves());
-//        updPokemon.setNextEvolution("chu chu");
-//
-//        Mockito.when(pokemonService.getPokemonById(newPokemon.getId())).thenReturn(newPokemon);
-//        Mockito.when(pokemonService.updatePokemon(updPokemon)).thenReturn(updPokemon);
-//
-//        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/api/v1/pokemon/13").contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON).content(this.objectMapper.writeValueAsString(updPokemon));
-//
-//        mockMvc.perform(mockRequest).andExpect(status().isOk()).andExpect(jsonPath("$" , notNullValue())).andExpect(jsonPath("$.name" , is("pika pika")));
-//    }
+    @Test
+    public void updatePokemon_success() throws Exception{
+
+        Pokemon newPokemon = PokemonFactory.getPokemons().get(0);
+
+        Pokemon updPokemon = getUpdatedPokemon(newPokemon);
+
+        Mockito.when(pokemonService.getPokemonById(newPokemon.getId())).thenReturn(newPokemon);
+        Mockito.when(pokemonService.updatePokemon(updPokemon)).thenReturn(updPokemon);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/api/v1/pokemon/13").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).content(this.objectMapper.writeValueAsString(updPokemon));
+
+        mockMvc.perform(mockRequest).andExpect(status().isOk());
+    }
+
+    @Test
+    public void updatePokemon_PokemonNotExist() throws Exception{
+        Pokemon newPokemon = PokemonFactory.getPokemons().get(0);
+        Pokemon updPokemon = getUpdatedPokemon(newPokemon);
+
+        Mockito.when(pokemonService.getPokemonById(newPokemon.getId())).thenReturn(null);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/api/v1/pokemon/13").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).content(this.objectMapper.writeValueAsString(updPokemon));
+
+        mockMvc.perform(mockRequest).andExpect(status().isNotFound())
+                .andExpect(result ->
+                        assertTrue(result.getResolvedException() instanceof PokemonNotFoundException
+                        )).andExpect(result ->
+                assertEquals("Pokemon not found for this : "+ newPokemon.getId(), result.getResolvedException().getMessage()));
+    }
 
     @Test
     public void createPokemon_success() throws Exception{
         Pokemon newPokemon = PokemonFactory.getPokemons().get(1);
 
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/api/v1/pokemon/13").contentType(MediaType.APPLICATION_JSON)
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/v1/pokemon").contentType(MediaType.APPLICATION_JSON)
           .accept(MediaType.APPLICATION_JSON).content(this.objectMapper.writeValueAsString(newPokemon));
 
         mockMvc.perform(mockRequest).andExpect(status().isCreated());
@@ -160,6 +167,7 @@ class PokemonControllerTest {
         Mockito.when(pokemonService.getPokemonById(pokemon.getId())).thenReturn(null);
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/pokemon/{id}", pokemon.getId()).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
                 .andExpect(result ->
                         assertTrue(result.getResolvedException() instanceof PokemonNotFoundException
                         )).andExpect(result ->
@@ -167,5 +175,19 @@ class PokemonControllerTest {
 
     }
 
+   private Pokemon getUpdatedPokemon(Pokemon newPokemon){
+       Pokemon updPokemon = new Pokemon();
+       updPokemon.setId(13);
+       updPokemon.setName("pika pika");
+       updPokemon.setAge(newPokemon.getAge());
+       updPokemon.setGender(newPokemon.getGender());
+       updPokemon.setDescription(newPokemon.getDescription());
+       updPokemon.setBreed(newPokemon.getBreed());
+       updPokemon.setImageUrl(newPokemon.getImageUrl());
+       newPokemon.getBattleMoves().add(new BattleMoves("Rest" , "Psychic" , "Non-damaging" , "" , ""));
+       updPokemon.setBattleMoves(newPokemon.getBattleMoves());
+       updPokemon.setNextEvolution("chu chu");
 
+       return updPokemon;
+   }
 }

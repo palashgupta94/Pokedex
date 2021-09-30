@@ -1,6 +1,9 @@
 package com.liseinfotech.pokedex.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -13,26 +16,29 @@ public class Pokemon implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-
+    @NotNull
+    @NotBlank
     private String name;
 
-
-    private String gender;
+    @NotNull
+    private Gender gender;
 
 
     private int age;
 
-
+    @NotNull
     private String breed;
 
 
     @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     @JoinColumn
     private List<BattleMoves> battleMoves;
-//
-//    @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
-//    @JoinColumn(name = "pokemon_id")
-//    private List<PokemonTypeEnum>pokemonType;
+
+    @ElementCollection(targetClass = PokemonTypeEnum.class)
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    @NotEmpty
+    private List<PokemonTypeEnum> pokemonType;
 
     @Column(name = "next_evolution")
     private String nextEvolution;
@@ -44,7 +50,7 @@ public class Pokemon implements Serializable {
     public Pokemon() {
     }
 
-    public Pokemon(int id, String name, String gender, int age, String breed, List<BattleMoves> battleMoves, String nextEvolution, String description, String imageUrl) {
+    public Pokemon(int id, String name, Gender gender, int age, String breed, List<BattleMoves> battleMoves, String nextEvolution, String description, String imageUrl) {
         this.id = id;
         this.name = name;
         this.gender = gender;
@@ -72,11 +78,11 @@ public class Pokemon implements Serializable {
         this.name = name;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 
@@ -104,13 +110,13 @@ public class Pokemon implements Serializable {
         this.battleMoves = battleMoves;
     }
 
-//    public List<PokemonType> getPokemonType() {
-//        return pokemonType;
-//    }
-//
-//    public void setPokemonType(List<PokemonType> pokemonType) {
-//        this.pokemonType = pokemonType;
-//    }
+    public List<PokemonTypeEnum> getPokemonType() {
+        return pokemonType;
+    }
+
+    public void setPokemonType(List<PokemonTypeEnum> pokemonType) {
+        this.pokemonType = pokemonType;
+    }
 
     public String getNextEvolution() {
         return nextEvolution;
@@ -156,6 +162,7 @@ public class Pokemon implements Serializable {
                 ", nextEvolution='" + nextEvolution + '\'' +
                 ", description='" + description + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
+                ", Type='" + pokemonType + '\'' +
                 '}';
     }
 }
